@@ -1,0 +1,6 @@
+/
+/about
+/services
+/team
+/partners
+/contact

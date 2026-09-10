@@ -1,0 +1,23 @@
+{
+  "name": "مؤسسة بروع التجارية",
+  "short_name": "بروع",
+  "description": "الموقع الرسمي لمؤسسة بروع التجارية للمقاولات العامة وتأجير المعدات",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f6f2ea",
+  "theme_color": "#11100e",
+  "icons": [
+    {
+      "src": "/favicon.png?v=2",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/apple-touch-icon.png?v=2",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
