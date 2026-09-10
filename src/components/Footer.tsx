@@ -1,7 +1,11 @@
 import { Link } from 'react-router-dom'
-import { company, navLinks, whatsappUrl } from '../data/site'
+import { navLinks } from '../data/site'
+import { useSite } from '../context/SiteContext'
 
 export function Footer() {
+  const { data, whatsappUrl } = useSite()
+  const { company } = data
+
   return (
     <footer className="site-footer">
       <div className="container footer-grid">

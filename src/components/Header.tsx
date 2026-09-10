@@ -1,7 +1,8 @@
 import type { ReactNode } from 'react'
 import { useEffect, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
-import { company, navLinks } from '../data/site'
+import { navLinks } from '../data/site'
+import { useSite } from '../context/SiteContext'
 
 const icons: Record<string, ReactNode> = {
   '/': (
@@ -37,6 +38,8 @@ const icons: Record<string, ReactNode> = {
 }
 
 export function Header() {
+  const { data } = useSite()
+  const { company } = data
   const { pathname } = useLocation()
   const [open, setOpen] = useState(false)
 
@@ -105,9 +108,17 @@ export function Header() {
           <div className="drawer-head">
             <div className="drawer-brand">
               <img className="drawer-mark" src="/logo-mark.png?v=1" alt="" />
-              <img className="drawer-wordmark" src="/logo-wordmark.png?v=1" alt={company.name} />
+              <img
+                className="drawer-wordmark"
+                src="/logo-wordmark.png?v=1"
+                alt={company.name}
+              />
             </div>
-            <button type="button" aria-label="إغلاق القائمة" onClick={() => setOpen(false)}>
+            <button
+              type="button"
+              aria-label="إغلاق القائمة"
+              onClick={() => setOpen(false)}
+            >
               ✕
             </button>
           </div>

@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react'
-import { company, services } from '../data/site'
+import { useSite } from '../context/SiteContext'
 
 const initialForm = {
   name: '',
@@ -10,6 +10,7 @@ const initialForm = {
 }
 
 export function ContactForm() {
+  const { data } = useSite()
   const [form, setForm] = useState(initialForm)
   const [sent, setSent] = useState(false)
 
@@ -22,7 +23,7 @@ export function ContactForm() {
     event.preventDefault()
 
     const selectedService =
-      services.find((service) => service.id === form.serviceId)?.title ??
+      data.services.find((service) => service.id === form.serviceId)?.title ??
       'غير محدد'
 
     const body = [
@@ -35,7 +36,7 @@ export function ContactForm() {
       form.message,
     ].join('\n')
 
-    const mailto = `mailto:${company.email}?subject=${encodeURIComponent(
+    const mailto = `mailto:${data.company.email}?subject=${encodeURIComponent(
       `طلب تواصل — ${form.name}`,
     )}&body=${encodeURIComponent(body)}`
 
@@ -103,7 +104,7 @@ export function ContactForm() {
             <option value="" disabled>
               اختر خدمة
             </option>
-            {services.map((service) => (
+            {data.services.map((service) => (
               <option key={service.id} value={service.id}>
                 {service.title}
               </option>

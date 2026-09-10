@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { company, whatsappUrl } from '../data/site'
+import { useSite } from '../context/SiteContext'
 
 function WhatsAppIcon() {
   return (
@@ -14,6 +14,7 @@ function WhatsAppIcon() {
 }
 
 export function WhatsAppFab() {
+  const { data, whatsappUrl } = useSite()
   const [open, setOpen] = useState(false)
 
   useEffect(() => {
@@ -39,7 +40,7 @@ export function WhatsAppFab() {
       {open ? (
         <div className="whatsapp-picker" role="dialog" aria-label="اختر رقم التواصل">
           <p>اختر رقم التواصل</p>
-          {company.phones.map((phone) => (
+          {data.company.phones.map((phone) => (
             <a
               key={phone.id}
               href={whatsappUrl(phone.whatsapp)}

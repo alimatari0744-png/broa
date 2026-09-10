@@ -4,9 +4,12 @@ import { PageHero } from '../components/PageHero'
 import { Reveal } from '../components/Reveal'
 import { SectionTitle } from '../components/SectionTitle'
 import { WindowMotif } from '../components/WindowMotif'
-import { company, values } from '../data/site'
+import { useSite } from '../context/SiteContext'
 
 export function About() {
+  const { data } = useSite()
+  const { company, values } = data
+
   return (
     <>
       <PageHero

@@ -1,9 +1,12 @@
 import { PageHero } from '../components/PageHero'
 import { Reveal } from '../components/Reveal'
 import { ServiceCard } from '../components/ServiceCard'
-import { services } from '../data/site'
+import { useSite } from '../context/SiteContext'
 
 export function Services() {
+  const { data } = useSite()
+  const { services } = data
+
   return (
     <>
       <PageHero

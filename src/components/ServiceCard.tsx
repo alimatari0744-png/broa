@@ -1,7 +1,5 @@
 import { Link } from 'react-router-dom'
-import type { services } from '../data/site'
-
-type Service = (typeof services)[number]
+import type { Service } from '../data/site'
 
 export function ServiceCard({
   service,

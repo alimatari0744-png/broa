@@ -1,8 +1,9 @@
-import { whatsappUrl, type team } from '../data/site'
+import type { TeamMember } from '../data/site'
+import { useSite } from '../context/SiteContext'
 
-type Member = (typeof team)[number]
+export function TeamCard({ member }: { member: TeamMember }) {
+  const { whatsappUrl } = useSite()
 
-export function TeamCard({ member }: { member: Member }) {
   return (
     <article className="team-card">
       <div className="team-card-photo">

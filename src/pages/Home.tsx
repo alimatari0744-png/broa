@@ -7,9 +7,12 @@ import { SectionTitle } from '../components/SectionTitle'
 import { ServiceCard } from '../components/ServiceCard'
 import { TeamCard } from '../components/TeamCard'
 import { WindowMotif } from '../components/WindowMotif'
-import { company, partners, services, team, values } from '../data/site'
+import { useSite } from '../context/SiteContext'
 
 export function Home() {
+  const { data } = useSite()
+  const { company, partners, services, team, values } = data
+
   return (
     <>
       <section className="hero">

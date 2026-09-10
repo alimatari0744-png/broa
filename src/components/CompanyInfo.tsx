@@ -1,6 +1,9 @@
-import { company } from '../data/site'
+import { useSite } from '../context/SiteContext'
 
 export function CompanyInfo() {
+  const { data } = useSite()
+  const { company } = data
+
   return (
     <section className="company-info">
       <div className="container company-info-card">

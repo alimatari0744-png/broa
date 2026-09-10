@@ -1,8 +1,11 @@
 import { PageHero } from '../components/PageHero'
 import { Reveal } from '../components/Reveal'
-import { partners } from '../data/site'
+import { useSite } from '../context/SiteContext'
 
 export function Partners() {
+  const { data } = useSite()
+  const { partners } = data
+
   return (
     <>
       <PageHero

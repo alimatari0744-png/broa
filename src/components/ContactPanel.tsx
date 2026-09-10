@@ -1,6 +1,9 @@
-import { company, whatsappUrl } from '../data/site'
+import { useSite } from '../context/SiteContext'
 
 export function ContactPanel() {
+  const { data, whatsappUrl } = useSite()
+  const { company } = data
+
   return (
     <div className="contact-layout">
       <div className="contact-details">
