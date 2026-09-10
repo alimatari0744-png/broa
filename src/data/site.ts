@@ -103,7 +103,7 @@ export const defaultSiteData: SiteData = {
     whatsappMessage:
       'السلام عليكم، أرغب في الاستفسار عن خدمات مؤسسة بروع التجارية',
     mapEmbedUrl:
-      'https://www.openstreetmap.org/export/embed.html?bbox=46.52%2C24.58%2C46.88%2C24.85&layer=mapnik',
+      'https://www.google.com/maps?q=24.7136,46.6753&z=12&output=embed',
     seo: {
       title: 'مؤسسة بروع التجارية | المقاولات العامة وتأجير المعدات',
       description:
@@ -254,4 +254,111 @@ export function whatsappUrl(number: string, message?: string) {
 
 export function createId(prefix: string) {
   return `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`
+}
+
+/**
+ * يستخرج أفضل إحداثيات ودرجة تقريب من رابط خرائط جوجل.
+ * الأولوية لإحداثيات الدبوس (!3d!4d) ثم مركز العرض (@lat,lng,zoom).
+ */
+function extractMapPin(raw: string): { lat: string; lng: string; zoom: number } | null {
+  const pinMatch = raw.match(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/)
+  const atMatch = raw.match(
+    /@(-?\d+\.\d+),(-?\d+\.\d+)(?:,(\d+(?:\.\d+)?)z)?/,
+  )
+  const llMatch = raw.match(/[?&](?:ll|center)=(-?\d+\.\d+),(-?\d+\.\d+)/i)
+  const qCoordMatch = raw.match(
+    /[?&]q=(-?\d+\.\d+)[,+\s](-?\d+\.\d+)/i,
+  )
+
+  let lat: string | null = null
+  let lng: string | null = null
+  let zoom = 17
+
+  if (pinMatch) {
+    lat = pinMatch[1]
+    lng = pinMatch[2]
+  } else if (atMatch) {
+    lat = atMatch[1]
+    lng = atMatch[2]
+  } else if (llMatch) {
+    lat = llMatch[1]
+    lng = llMatch[2]
+  } else if (qCoordMatch) {
+    lat = qCoordMatch[1]
+    lng = qCoordMatch[2]
+  }
+
+  if (atMatch?.[3]) {
+    zoom = Math.min(21, Math.max(3, Math.round(Number(atMatch[3]))))
+  } else if (pinMatch) {
+    zoom = 18
+  }
+
+  const zoomParam = raw.match(/[?&]z=(\d+)/i)
+  if (zoomParam) {
+    zoom = Math.min(21, Math.max(3, Number(zoomParam[1])))
+  }
+
+  if (!lat || !lng) return null
+  return { lat, lng, zoom }
+}
+
+function buildCoordEmbed(lat: string, lng: string, zoom: number) {
+  return `https://www.google.com/maps?q=${lat},${lng}&ll=${lat},${lng}&z=${zoom}&hl=ar&output=embed`
+}
+
+/**
+ * يحوّل رابط خرائط جوجل (مشاركة / مكان / إحداثيات / كود embed)
+ * إلى رابط iframe بدقة أعلى قدر الإمكان.
+ */
+export function toMapEmbedUrl(input: string) {
+  let raw = input.trim()
+  if (!raw) return raw
+
+  const iframeSrc = raw.match(/src=["']([^"']+)["']/i)
+  if (iframeSrc) raw = iframeSrc[1].trim()
+
+  if (
+    raw.includes('/maps/embed') ||
+    /[?&]output=embed\b/i.test(raw) ||
+    raw.includes('openstreetmap.org/export/embed')
+  ) {
+    return raw
+  }
+
+  const pin = extractMapPin(raw)
+  if (pin) return buildCoordEmbed(pin.lat, pin.lng, pin.zoom)
+
+  try {
+    const url = new URL(raw)
+    const q =
+      url.searchParams.get('q') ||
+      url.searchParams.get('query') ||
+      url.searchParams.get('destination')
+    if (q) {
+      const fromQ = extractMapPin(`?q=${q}`)
+      if (fromQ) return buildCoordEmbed(fromQ.lat, fromQ.lng, fromQ.zoom)
+      return `https://www.google.com/maps?q=${encodeURIComponent(q)}&z=17&hl=ar&output=embed`
+    }
+
+    const placeMatch = url.pathname.match(/\/place\/([^/]+)/)
+    if (placeMatch) {
+      const place = decodeURIComponent(placeMatch[1].replace(/\+/g, ' '))
+      return `https://www.google.com/maps?q=${encodeURIComponent(place)}&z=17&hl=ar&output=embed`
+    }
+
+    const cidHex = raw.match(/!1s(0x[0-9a-f]+):(0x[0-9a-f]+)/i)
+    if (cidHex) {
+      try {
+        const cid = BigInt(cidHex[2]).toString(10)
+        return `https://www.google.com/maps?cid=${cid}&hl=ar&z=17&output=embed`
+      } catch {
+        // تجاهل
+      }
+    }
+  } catch {
+    // نص حر أو رابط غير مكتمل
+  }
+
+  return `https://www.google.com/maps?q=${encodeURIComponent(raw)}&z=17&hl=ar&output=embed`
 }

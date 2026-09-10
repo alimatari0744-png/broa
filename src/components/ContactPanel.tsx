@@ -1,3 +1,4 @@
+import { toMapEmbedUrl } from '../data/site'
 import { useSite } from '../context/SiteContext'
 
 export function ContactPanel() {
@@ -32,7 +33,7 @@ export function ContactPanel() {
       <div className="contact-map">
         <iframe
           title="موقع مؤسسة بروع التجارية على الخريطة"
-          src={company.mapEmbedUrl}
+          src={toMapEmbedUrl(company.mapEmbedUrl)}
           loading="lazy"
           referrerPolicy="no-referrer-when-downgrade"
         />

@@ -1,0 +1,19 @@
+name: Verify content paths
+
+on:
+  push:
+    paths:
+      - 'public/data/**'
+      - 'public/images/managed/**'
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Ensure defaults stay present
+        run: |
+          test -f public/data/site.defaults.json
+          test -f public/data/site.json
+          echo "Content files OK — defaults are not overwritten by this workflow."
