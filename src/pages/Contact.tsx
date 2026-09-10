@@ -2,20 +2,20 @@ import { ContactForm } from '../components/ContactForm'
 import { ContactPanel } from '../components/ContactPanel'
 import { PageHero } from '../components/PageHero'
 import { SectionTitle } from '../components/SectionTitle'
+import { useLanguage } from '../context/LanguageContext'
 
 export function Contact() {
+  const { t } = useLanguage()
+
   return (
     <>
-      <PageHero
-        title="تواصل معنا"
-        text="يمكنك التواصل عبر الأرقام الرسمية أو إرسال طلبك من خلال النموذج أدناه."
-      />
+      <PageHero title={t.navContact} text={t.contactPageLead} />
       <section className="section">
         <div className="container">
           <SectionTitle
-            eyebrow="بيانات التواصل"
-            title="الأرقام الرسمية والخريطة"
-            text="الأرقام الرسمية المعتمدة للاستفسارات والدعم، مع عرض الموقع على الخريطة."
+            eyebrow={t.contactDataEyebrow}
+            title={t.contactDataTitle}
+            text={t.contactDataText}
           />
           <ContactPanel />
         </div>
@@ -23,9 +23,9 @@ export function Contact() {
       <section className="section section-alt">
         <div className="container">
           <SectionTitle
-            eyebrow="نموذج التواصل"
-            title="أرسل بياناتك وسنعاود الاتصال"
-            text="أدخل اسمك وبريدك ورقم جوالك، واختر الخدمة المطلوبة مع كتابة نص الرسالة."
+            eyebrow={t.formSectionEyebrow}
+            title={t.formSectionTitle}
+            text={t.formSectionText}
           />
           <ContactForm />
         </div>

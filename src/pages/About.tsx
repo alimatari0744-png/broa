@@ -4,47 +4,39 @@ import { PageHero } from '../components/PageHero'
 import { Reveal } from '../components/Reveal'
 import { SectionTitle } from '../components/SectionTitle'
 import { WindowMotif } from '../components/WindowMotif'
-import { useSite } from '../context/SiteContext'
+import { useLanguage, useLocalizedSite } from '../context/LanguageContext'
 
 export function About() {
-  const { data } = useSite()
+  const { t } = useLanguage()
+  const data = useLocalizedSite()
   const { company, values } = data
 
   return (
     <>
-      <PageHero
-        title="نبذة عن المؤسسة"
-        text="منشأة متخصصة في المقاولات العامة وتأجير المعدات، تعمل بهوية واضحة ومعايير تنفيذ احترافية."
-      />
+      <PageHero title={t.aboutEyebrow} text={t.aboutPageLead} />
       <section className="section">
         <div className="container about-preview">
           <Reveal>
             <div className="about-copy">
-              <SectionTitle eyebrow="من نحن" title={company.name} />
+              <SectionTitle eyebrow={t.aboutWhoEyebrow} title={company.name} />
               <p>{company.description}</p>
-              <p>
-                تأسست المؤسسة لتقديم خدمات متكاملة في قطاع البناء، بدءًا من
-                المقاولات العامة للمباني السكنية، مرورًا بإنشاء وتجهيز محطات
-                البترول وأعمال العظم والتشطيب، وصولًا إلى تأجير المعدات وتوريد
-                مواد البناء.
-              </p>
-              <p>
-                نسعى لأن نكون شريكًا موثوقًا في تنفيذ المشاريع، عبر التزام واضح
-                بالجودة، والسلامة، ومواعيد التسليم، والتواصل المباشر مع العميل
-                في كل مرحلة.
-              </p>
+              <p>{t.aboutP1}</p>
+              <p>{t.aboutP2}</p>
             </div>
           </Reveal>
           <Reveal>
             <div className="about-media">
-              <img src="/images/about.jpg" alt="أعمال مؤسسة بروع التجارية" />
+              <img src="/images/about.jpg" alt={t.heroImageAlt} />
             </div>
           </Reveal>
         </div>
       </section>
       <section className="section section-alt">
         <div className="container">
-          <SectionTitle eyebrow="قيم العمل" title="ما نلتزم به في كل مشروع" />
+          <SectionTitle
+            eyebrow={t.aboutValuesEyebrow}
+            title={t.aboutValuesTitle}
+          />
           <div className="values-grid">
             {values.map((value) => (
               <Reveal key={value.title}>
@@ -58,7 +50,7 @@ export function About() {
           </div>
           <div className="section-cta">
             <Link to="/services" className="btn btn-gold">
-              استعرض خدماتنا
+              {t.aboutServicesCta}
             </Link>
           </div>
         </div>

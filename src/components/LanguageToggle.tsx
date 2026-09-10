@@ -1,34 +1,20 @@
-import { useLanguage, type Lang } from '../context/LanguageContext'
+import { useLanguage } from '../context/LanguageContext'
 
 export function LanguageToggle({ className = '' }: { className?: string }) {
-  const { lang, setLang, t } = useLanguage()
-
-  function select(next: Lang) {
-    setLang(next)
-  }
+  const { lang, toggleLang, t } = useLanguage()
+  const nextIsEnglish = lang === 'ar'
 
   return (
-    <div
-      className={`lang-switch ${className}`.trim()}
-      role="group"
-      aria-label={t.language}
+    <button
+      type="button"
+      className={`lang-toggle ${className}`.trim()}
+      onClick={toggleLang}
+      aria-label={nextIsEnglish ? t.switchToEnglish : t.switchToArabic}
+      title={nextIsEnglish ? t.switchToEnglish : t.switchToArabic}
     >
-      <button
-        type="button"
-        className={lang === 'ar' ? 'is-active' : ''}
-        aria-pressed={lang === 'ar'}
-        onClick={() => select('ar')}
-      >
-        العربية
-      </button>
-      <button
-        type="button"
-        className={lang === 'en' ? 'is-active' : ''}
-        aria-pressed={lang === 'en'}
-        onClick={() => select('en')}
-      >
-        EN
-      </button>
-    </div>
+      <span className="lang-toggle-letter" lang={nextIsEnglish ? 'en' : 'ar'}>
+        {nextIsEnglish ? 'A' : 'ع'}
+      </span>
+    </button>
   )
 }

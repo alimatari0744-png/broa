@@ -2,8 +2,7 @@ import type { ReactNode } from 'react'
 import { useEffect, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { navLinks } from '../data/site'
-import { navLabel, useLanguage } from '../context/LanguageContext'
-import { useSite } from '../context/SiteContext'
+import { navLabel, useLanguage, useLocalizedSite } from '../context/LanguageContext'
 import { LanguageToggle } from './LanguageToggle'
 
 const icons: Record<string, ReactNode> = {
@@ -40,9 +39,8 @@ const icons: Record<string, ReactNode> = {
 }
 
 export function Header() {
-  const { data } = useSite()
+  const { company } = useLocalizedSite()
   const { t } = useLanguage()
-  const { company } = data
   const { pathname } = useLocation()
   const [open, setOpen] = useState(false)
 

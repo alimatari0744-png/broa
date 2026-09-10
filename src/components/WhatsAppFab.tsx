@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { useSite } from '../context/SiteContext'
+import { whatsappUrl } from '../data/site'
+import { useLanguage, useLocalizedSite } from '../context/LanguageContext'
 
 function WhatsAppIcon() {
   return (
@@ -14,7 +15,8 @@ function WhatsAppIcon() {
 }
 
 export function WhatsAppFab() {
-  const { data, whatsappUrl } = useSite()
+  const { t } = useLanguage()
+  const data = useLocalizedSite()
   const [open, setOpen] = useState(false)
 
   useEffect(() => {
@@ -32,18 +34,22 @@ export function WhatsAppFab() {
         <button
           className="whatsapp-backdrop"
           type="button"
-          aria-label="إغلاق اختيار الرقم"
+          aria-label={t.closeWhatsAppPicker}
           onClick={() => setOpen(false)}
         />
       ) : null}
 
       {open ? (
-        <div className="whatsapp-picker" role="dialog" aria-label="اختر رقم التواصل">
-          <p>اختر رقم التواصل</p>
+        <div
+          className="whatsapp-picker"
+          role="dialog"
+          aria-label={t.chooseWhatsApp}
+        >
+          <p>{t.chooseWhatsApp}</p>
           {data.company.phones.map((phone) => (
             <a
               key={phone.id}
-              href={whatsappUrl(phone.whatsapp)}
+              href={whatsappUrl(phone.whatsapp, data.company.whatsappMessage)}
               target="_blank"
               rel="noreferrer"
               onClick={() => setOpen(false)}
@@ -61,7 +67,7 @@ export function WhatsAppFab() {
       <button
         className="whatsapp-fab"
         type="button"
-        aria-label="تواصل عبر واتساب"
+        aria-label={t.whatsappFab}
         aria-expanded={open}
         onClick={() => setOpen((value) => !value)}
       >

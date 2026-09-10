@@ -6,96 +6,17 @@ import {
   useState,
   type ReactNode,
 } from 'react'
-
-export type Lang = 'ar' | 'en'
+import { dictionaries, type Dictionary, type Lang } from '../i18n/dictionaries'
+import { localizeSiteData } from '../i18n/content.en'
+import type { SiteData } from '../data/site'
+import { useSite } from './SiteContext'
 
 const STORAGE_KEY = 'broa-lang'
-
-type Dictionary = {
-  contactCta: string
-  navHome: string
-  navAbout: string
-  navServices: string
-  navTeam: string
-  navPartners: string
-  navContact: string
-  openMenu: string
-  closeMenu: string
-  footerSections: string
-  footerCompany: string
-  adminViewSite: string
-  adminLogout: string
-  adminLogin: string
-  adminIdentifier: string
-  adminEnter: string
-  adminBack: string
-  tabCompany: string
-  tabContact: string
-  tabServices: string
-  tabTeam: string
-  tabPartners: string
-  tabValues: string
-  language: string
-}
-
-const dictionaries: Record<Lang, Dictionary> = {
-  ar: {
-    contactCta: 'تواصل معنا',
-    navHome: 'الرئيسية',
-    navAbout: 'نبذة عن المؤسسة',
-    navServices: 'خدماتنا',
-    navTeam: 'فريق العمل',
-    navPartners: 'شركاء النجاح',
-    navContact: 'تواصل معنا',
-    openMenu: 'فتح القائمة',
-    closeMenu: 'إغلاق القائمة',
-    footerSections: 'أقسام الموقع',
-    footerCompany: 'بيانات المؤسسة',
-    adminViewSite: 'عرض الموقع',
-    adminLogout: 'خروج',
-    adminLogin: 'دخول',
-    adminIdentifier: 'البريد أو الرقم',
-    adminEnter: 'دخول',
-    adminBack: 'العودة للموقع',
-    tabCompany: 'بيانات المنشأة',
-    tabContact: 'التواصل والخريطة',
-    tabServices: 'الخدمات',
-    tabTeam: 'الموظفون',
-    tabPartners: 'الشركاء',
-    tabValues: 'منهج العمل',
-    language: 'اللغة',
-  },
-  en: {
-    contactCta: 'Contact us',
-    navHome: 'Home',
-    navAbout: 'About',
-    navServices: 'Services',
-    navTeam: 'Team',
-    navPartners: 'Partners',
-    navContact: 'Contact',
-    openMenu: 'Open menu',
-    closeMenu: 'Close menu',
-    footerSections: 'Site sections',
-    footerCompany: 'Company details',
-    adminViewSite: 'View site',
-    adminLogout: 'Log out',
-    adminLogin: 'Sign in',
-    adminIdentifier: 'Email or phone',
-    adminEnter: 'Sign in',
-    adminBack: 'Back to site',
-    tabCompany: 'Company',
-    tabContact: 'Contact & map',
-    tabServices: 'Services',
-    tabTeam: 'Team',
-    tabPartners: 'Partners',
-    tabValues: 'Values',
-    language: 'Language',
-  },
-}
 
 type LanguageContextValue = {
   lang: Lang
   setLang: (lang: Lang) => void
+  toggleLang: () => void
   t: Dictionary
   dir: 'rtl' | 'ltr'
 }
@@ -125,6 +46,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     () => ({
       lang,
       setLang: setLangState,
+      toggleLang: () => setLangState((current) => (current === 'ar' ? 'en' : 'ar')),
       t: dictionaries[lang],
       dir: lang === 'ar' ? 'rtl' : 'ltr',
     }),
@@ -140,6 +62,12 @@ export function useLanguage() {
   const ctx = useContext(LanguageContext)
   if (!ctx) throw new Error('useLanguage must be used within LanguageProvider')
   return ctx
+}
+
+export function useLocalizedSite(): SiteData {
+  const { data } = useSite()
+  const { lang } = useLanguage()
+  return useMemo(() => localizeSiteData(data, lang), [data, lang])
 }
 
 export function navLabel(path: string, t: Dictionary) {
@@ -160,3 +88,5 @@ export function navLabel(path: string, t: Dictionary) {
       return path
   }
 }
+
+export type { Lang, Dictionary }

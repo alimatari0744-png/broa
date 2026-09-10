@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react'
-import { useSite } from '../context/SiteContext'
+import { useLanguage, useLocalizedSite } from '../context/LanguageContext'
 
 const initialForm = {
   name: '',
@@ -10,7 +10,8 @@ const initialForm = {
 }
 
 export function ContactForm() {
-  const { data } = useSite()
+  const { t } = useLanguage()
+  const data = useLocalizedSite()
   const [form, setForm] = useState(initialForm)
   const [sent, setSent] = useState(false)
 
@@ -24,20 +25,20 @@ export function ContactForm() {
 
     const selectedService =
       data.services.find((service) => service.id === form.serviceId)?.title ??
-      'غير محدد'
+      t.formUnspecified
 
     const body = [
-      `الاسم: ${form.name}`,
-      `البريد: ${form.email}`,
-      `الجوال: ${form.phone}`,
-      `الخدمة: ${selectedService}`,
+      `${t.formName}: ${form.name}`,
+      `${t.formEmail}: ${form.email}`,
+      `${t.formMobile}: ${form.phone}`,
+      `${t.formService}: ${selectedService}`,
       '',
-      'الرسالة:',
+      `${t.formMessage}:`,
       form.message,
     ].join('\n')
 
     const mailto = `mailto:${data.company.email}?subject=${encodeURIComponent(
-      `طلب تواصل — ${form.name}`,
+      `${t.contactCta} — ${form.name}`,
     )}&body=${encodeURIComponent(body)}`
 
     window.location.href = mailto
@@ -47,26 +48,26 @@ export function ContactForm() {
   return (
     <form className="contact-form" onSubmit={handleSubmit}>
       <div className="contact-form-head">
-        <h3>أرسل استفسارك</h3>
-        <p>عبّئ البيانات التالية وسنعاود التواصل معك في أقرب وقت.</p>
+        <h3>{t.formTitle}</h3>
+        <p>{t.formLead}</p>
       </div>
 
       <div className="contact-form-grid">
         <label className="field">
-          <span>الاسم</span>
+          <span>{t.formName}</span>
           <input
             type="text"
             name="name"
             required
             autoComplete="name"
-            placeholder="الاسم الكامل"
+            placeholder={t.formNamePh}
             value={form.name}
             onChange={(event) => updateField('name', event.target.value)}
           />
         </label>
 
         <label className="field">
-          <span>البريد الإلكتروني</span>
+          <span>{t.formEmail}</span>
           <input
             type="email"
             name="email"
@@ -80,7 +81,7 @@ export function ContactForm() {
         </label>
 
         <label className="field">
-          <span>رقم الجوال</span>
+          <span>{t.formMobile}</span>
           <input
             type="tel"
             name="phone"
@@ -94,7 +95,7 @@ export function ContactForm() {
         </label>
 
         <label className="field">
-          <span>الخدمة المطلوبة</span>
+          <span>{t.formService}</span>
           <select
             name="service"
             required
@@ -102,7 +103,7 @@ export function ContactForm() {
             onChange={(event) => updateField('serviceId', event.target.value)}
           >
             <option value="" disabled>
-              اختر خدمة
+              {t.formChooseService}
             </option>
             {data.services.map((service) => (
               <option key={service.id} value={service.id}>
@@ -114,12 +115,12 @@ export function ContactForm() {
       </div>
 
       <label className="field field-full">
-        <span>نص الرسالة</span>
+        <span>{t.formMessage}</span>
         <textarea
           name="message"
           required
           rows={5}
-          placeholder="اكتب تفاصيل طلبك أو استفسارك هنا"
+          placeholder={t.formMessagePh}
           value={form.message}
           onChange={(event) => updateField('message', event.target.value)}
         />
@@ -127,13 +128,9 @@ export function ContactForm() {
 
       <div className="contact-form-actions">
         <button type="submit" className="btn btn-gold">
-          إرسال الرسالة
+          {t.formSubmit}
         </button>
-        {sent ? (
-          <p className="contact-form-hint">
-            تم تجهيز الرسالة في برنامج البريد لديك.
-          </p>
-        ) : null}
+        {sent ? <p className="contact-form-hint">{t.formSentHint}</p> : null}
       </div>
     </form>
   )

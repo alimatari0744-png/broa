@@ -1,18 +1,16 @@
 import { PageHero } from '../components/PageHero'
 import { Reveal } from '../components/Reveal'
 import { TeamCard } from '../components/TeamCard'
-import { useSite } from '../context/SiteContext'
+import { useLanguage, useLocalizedSite } from '../context/LanguageContext'
 
 export function Team() {
-  const { data } = useSite()
+  const { t } = useLanguage()
+  const data = useLocalizedSite()
   const { team } = data
 
   return (
     <>
-      <PageHero
-        title="فريق العمل"
-        text="فريق المؤسسة ببيانات التواصل الرسمية، والصور تجريبية لحين اعتماد الصور الحقيقية."
-      />
+      <PageHero title={t.navTeam} text={t.teamPageLead} />
       <section className="section">
         <div className="container">
           <div className="team-grid">

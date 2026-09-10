@@ -1,18 +1,16 @@
 import { PageHero } from '../components/PageHero'
 import { Reveal } from '../components/Reveal'
 import { ServiceCard } from '../components/ServiceCard'
-import { useSite } from '../context/SiteContext'
+import { useLanguage, useLocalizedSite } from '../context/LanguageContext'
 
 export function Services() {
-  const { data } = useSite()
+  const { t } = useLanguage()
+  const data = useLocalizedSite()
   const { services } = data
 
   return (
     <>
-      <PageHero
-        title="خدماتنا"
-        text="خدمات متخصصة في المقاولات العامة، محطات البترول، أعمال العظم والتشطيب، تأجير المعدات، وتوريد مواد البناء."
-      />
+      <PageHero title={t.navServices} text={t.servicesPageLead} />
       <section className="section">
         <div className="container">
           <div className="cards-grid">

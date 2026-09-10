@@ -1,8 +1,10 @@
 import type { TeamMember } from '../data/site'
-import { useSite } from '../context/SiteContext'
+import { whatsappUrl } from '../data/site'
+import { useLanguage, useLocalizedSite } from '../context/LanguageContext'
 
 export function TeamCard({ member }: { member: TeamMember }) {
-  const { whatsappUrl } = useSite()
+  const { t } = useLanguage()
+  const { company } = useLocalizedSite()
 
   return (
     <article className="team-card">
@@ -14,12 +16,16 @@ export function TeamCard({ member }: { member: TeamMember }) {
         <p className="team-role-title">{member.title}</p>
         <p className="team-role">{member.role}</p>
         <div className="team-contacts">
-          <a href={whatsappUrl(member.whatsapp)} target="_blank" rel="noreferrer">
-            <span>الهاتف</span>
+          <a
+            href={whatsappUrl(member.whatsapp, company.whatsappMessage)}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <span>{t.phone}</span>
             <b dir="ltr">{member.phone}</b>
           </a>
           <a href={`mailto:${member.email}`}>
-            <span>البريد</span>
+            <span>{t.email}</span>
             <b>{member.email}</b>
           </a>
         </div>

@@ -13,6 +13,9 @@ import { useSite } from '../../context/SiteContext'
 import { useLanguage } from '../../context/LanguageContext'
 import { ensureGithubTokenFromEnv } from '../../lib/githubStore'
 import { LanguageToggle } from '../../components/LanguageToggle'
+import { dictionaries } from '../../i18n/dictionaries'
+
+const ar = dictionaries.ar
 
 type Tab = 'company' | 'contact' | 'services' | 'team' | 'partners' | 'values'
 
@@ -243,9 +246,7 @@ export function AdminDashboard() {
   }
 
   async function confirmReset() {
-    const ok = window.confirm(
-      'هل تريد استعادة البيانات الافتراضية؟\nسيتم نشر النسخة الأصلية على GitHub، مع الإبقاء على صور وملفات الاستعادة الفردية دون حذفها أو استبدالها.',
-    )
+    const ok = window.confirm(t.adminResetConfirm)
     if (!ok) return
     setPublishing(true)
     setPublishError('')
@@ -278,16 +279,16 @@ export function AdminDashboard() {
           onClick={onSave}
           disabled={publishing}
         >
-          {publishing ? 'جاري الحفظ…' : label}
+            {publishing ? t.adminSaving : label}
         </button>
         {publishing ? (
           <p className="admin-save-pending" role="status">
-            جاري الرفع إلى GitHub…
+            {t.adminUploading}
           </p>
         ) : null}
         {!publishing && savedSection === section ? (
           <p className="admin-save-ok" role="status">
-            تم الحفظ ✓ — نُشر على GitHub
+            {t.adminSaved}
           </p>
         ) : null}
       </div>
@@ -331,7 +332,7 @@ export function AdminDashboard() {
       </header>
 
       {savedSection === 'reset' ? (
-        <p className="admin-saved">تم استعادة البيانات الافتراضية ✓</p>
+        <p className="admin-saved">{t.adminRestored}</p>
       ) : null}
 
       {publishError ? <p className="admin-error-banner">{publishError}</p> : null}
@@ -353,7 +354,7 @@ export function AdminDashboard() {
         <button
           className="admin-nav-backdrop"
           type="button"
-          aria-label="إغلاق القائمة"
+          aria-label={t.closeMenu}
           onClick={() => setMenuOpen(false)}
         />
         <aside className="admin-drawer" aria-hidden={!menuOpen}>
@@ -363,18 +364,18 @@ export function AdminDashboard() {
               <img
                 className="drawer-wordmark"
                 src="/logo-wordmark.png?v=1"
-                alt="بروعة"
+                alt={t.pageBrand}
               />
             </div>
             <button
               type="button"
-              aria-label="إغلاق القائمة"
+              aria-label={t.closeMenu}
               onClick={() => setMenuOpen(false)}
             >
               ✕
             </button>
           </div>
-          <nav aria-label="أقسام لوحة التحكم">
+          <nav>
             {tabs.map((item) => (
               <button
                 key={item.id}
@@ -406,17 +407,17 @@ export function AdminDashboard() {
       <div className="admin-panel">
         {tab === 'company' ? (
           <section className="admin-section">
-            <h2>بيانات المنشأة</h2>
+            <h2>{t.adminCompanyTitle}</h2>
             <div className="admin-grid">
               {(
                 [
-                  ['name', 'اسم المؤسسة'],
-                  ['tagline', 'النشاط / الشعار الفرعي'],
-                  ['slogan', 'العبارة التعريفية'],
-                  ['commercialRegister', 'السجل التجاري'],
-                  ['taxNumber', 'الرقم الضريبي'],
-                  ['iban', 'الآيبان'],
-                  ['email', 'البريد الرسمي'],
+                  ['name', t.adminCompanyName],
+                  ['tagline', t.adminTagline],
+                  ['slogan', t.adminSlogan],
+                  ['commercialRegister', t.adminCr],
+                  ['taxNumber', t.adminTax],
+                  ['iban', t.adminIban],
+                  ['email', t.adminEmail],
                 ] as const
               ).map(([key, label]) => (
                 <label key={key} className="field">
@@ -441,7 +442,7 @@ export function AdminDashboard() {
                 </label>
               ))}
               <label className="field field-full">
-                <span>وصف المؤسسة</span>
+                <span>{t.adminDescription}</span>
                 <textarea
                   rows={4}
                   value={draft.company.description}
@@ -459,7 +460,7 @@ export function AdminDashboard() {
             </div>
             <SaveBar
               section="company"
-              label="حفظ بيانات المنشأة"
+              label={t.adminSaveCompany}
               onSave={saveCompany}
             />
           </section>
@@ -467,13 +468,13 @@ export function AdminDashboard() {
 
         {tab === 'contact' ? (
           <section className="admin-section">
-            <h2>التواصل والخريطة</h2>
+            <h2>{t.adminContactTitle}</h2>
             <div className="admin-grid">
               <label className="field field-full">
-                <span>رابط خرائط جوجل</span>
+                <span>{t.adminMapLink}</span>
                 <input
                   dir="ltr"
-                  placeholder="الصق رابط Google Maps هنا"
+                  placeholder={t.adminMapPh}
                   value={draft.company.mapEmbedUrl}
                   onChange={(event) =>
                     setDraft((current) => ({
@@ -485,23 +486,19 @@ export function AdminDashboard() {
                     }))
                   }
                 />
-                <small className="admin-field-hint">
-                  لأدق موقع: في Google Maps اضغط مشاركة ← تضمين خريطة ← انسخ رابط
-                  الـ iframe (أو الصق كود التضمين كاملاً). أو افتح الرابط في المتصفح
-                  وانسخ الرابط الكامل من شريط العنوان ثم احفظ.
-                </small>
+                <small className="admin-field-hint">{t.adminMapHint}</small>
               </label>
               <div className="admin-map-preview field-full">
-                <span>معاينة الخريطة</span>
+                <span>{t.adminMapPreview}</span>
                 <iframe
-                  title="معاينة الخريطة"
+                  title={t.adminMapPreview}
                   src={toMapEmbedUrl(draft.company.mapEmbedUrl)}
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
                 />
               </div>
               <label className="field field-full">
-                <span>رسالة واتساب الافتراضية</span>
+                <span>{t.adminWhatsappMsg}</span>
                 <textarea
                   rows={3}
                   value={draft.company.whatsappMessage}
@@ -518,12 +515,12 @@ export function AdminDashboard() {
               </label>
             </div>
 
-            <h3>أرقام التواصل</h3>
+            <h3>{t.adminPhones}</h3>
             <div className="admin-list">
               {draft.company.phones.map((phone, index) => (
                 <div key={phone.id} className="admin-card">
                   <label className="field">
-                    <span>التسمية</span>
+                    <span>{t.adminPhoneLabel}</span>
                     <input
                       value={phone.label}
                       onChange={(event) =>
@@ -542,7 +539,7 @@ export function AdminDashboard() {
                     />
                   </label>
                   <label className="field">
-                    <span>الرقم</span>
+                    <span>{t.adminPhoneNumber}</span>
                     <input
                       dir="ltr"
                       value={phone.display}
@@ -581,7 +578,7 @@ export function AdminDashboard() {
                       }))
                     }
                   >
-                    حذف الرقم
+                    {t.adminDeletePhone}
                   </button>
                 </div>
               ))}
@@ -598,7 +595,7 @@ export function AdminDashboard() {
                       ...current.company.phones,
                       {
                         id: createId('phone'),
-                        label: 'رقم التواصل',
+                        label: ar.adminDefaultPhoneLabel,
                         display: '',
                         whatsapp: '',
                       },
@@ -607,11 +604,11 @@ export function AdminDashboard() {
                 }))
               }
             >
-              إضافة رقم
+              {t.adminAddPhone}
             </button>
             <SaveBar
               section="contact"
-              label="حفظ التواصل والخريطة"
+              label={t.adminSaveContact}
               onSave={saveContact}
             />
           </section>
@@ -620,17 +617,17 @@ export function AdminDashboard() {
         {tab === 'services' ? (
           <section className="admin-section">
             <div className="admin-section-head">
-              <h2>الخدمات</h2>
+              <h2>{t.adminServicesTitle}</h2>
               <button
                 type="button"
                 className="btn btn-outline-dark"
                 onClick={() => {
                   const next: Service = {
                     id: createId('service'),
-                    title: 'خدمة جديدة',
+                    title: ar.adminNewService,
                     image: '/images/services/residential.jpg',
-                    summary: 'وصف مختصر للخدمة.',
-                    details: 'تفاصيل أوضح عن الخدمة.',
+                    summary: ar.adminNewServiceSummary,
+                    details: ar.adminNewServiceDetails,
                   }
                   setDraft((current) => ({
                     ...current,
@@ -638,7 +635,7 @@ export function AdminDashboard() {
                   }))
                 }}
               >
-                إضافة خدمة
+                {t.adminAddService}
               </button>
             </div>
             <div className="admin-list">
@@ -647,7 +644,7 @@ export function AdminDashboard() {
                   <div className="admin-thumb">
                     <img src={service.image} alt="" />
                     <label className="btn btn-outline-dark admin-upload">
-                      تغيير الصورة
+                      {t.adminChangeImage}
                       <input
                         type="file"
                         accept="image/*"
@@ -666,7 +663,7 @@ export function AdminDashboard() {
                     </label>
                   </div>
                   <label className="field">
-                    <span>عنوان الخدمة</span>
+                    <span>{t.adminServiceTitle}</span>
                     <input
                       value={service.title}
                       onChange={(event) =>
@@ -682,7 +679,7 @@ export function AdminDashboard() {
                     />
                   </label>
                   <label className="field">
-                    <span>الملخص</span>
+                    <span>{t.adminSummary}</span>
                     <textarea
                       rows={3}
                       value={service.summary}
@@ -699,7 +696,7 @@ export function AdminDashboard() {
                     />
                   </label>
                   <label className="field">
-                    <span>التفاصيل</span>
+                    <span>{t.adminDetails}</span>
                     <textarea
                       rows={4}
                       value={service.details}
@@ -725,14 +722,14 @@ export function AdminDashboard() {
                       }))
                     }
                   >
-                    حذف الخدمة
+                    {t.adminDeleteService}
                   </button>
                 </div>
               ))}
             </div>
             <SaveBar
               section="services"
-              label="حفظ الخدمات"
+              label={t.adminSaveServices}
               onSave={saveServices}
             />
           </section>
@@ -741,16 +738,16 @@ export function AdminDashboard() {
         {tab === 'team' ? (
           <section className="admin-section">
             <div className="admin-section-head">
-              <h2>الموظفون</h2>
+              <h2>{t.adminTeamTitle}</h2>
               <button
                 type="button"
                 className="btn btn-outline-dark"
                 onClick={() => {
                   const next: TeamMember = {
                     id: createId('member'),
-                    name: 'موظف جديد',
-                    title: 'المسمى الوظيفي',
-                    role: 'وصف مختصر للدور',
+                    name: ar.adminNewMember,
+                    title: ar.adminNewMemberTitle,
+                    role: ar.adminNewMemberRole,
                     phone: '',
                     whatsapp: '',
                     email: '',
@@ -762,7 +759,7 @@ export function AdminDashboard() {
                   }))
                 }}
               >
-                إضافة موظف
+                {t.adminAddMember}
               </button>
             </div>
             <div className="admin-list">
@@ -771,7 +768,7 @@ export function AdminDashboard() {
                   <div className="admin-thumb">
                     <img src={member.image} alt="" />
                     <label className="btn btn-outline-dark admin-upload">
-                      رفع صورة
+                      {t.adminUploadPhoto}
                       <input
                         type="file"
                         accept="image/*"
@@ -791,11 +788,11 @@ export function AdminDashboard() {
                   </div>
                   {(
                     [
-                      ['name', 'الاسم'],
-                      ['title', 'المهنة / الدور'],
-                      ['role', 'وصف مختصر'],
-                      ['phone', 'الجوال'],
-                      ['email', 'البريد'],
+                      ['name', t.adminMemberName],
+                      ['title', t.adminMemberTitle],
+                      ['role', t.adminMemberRole],
+                      ['phone', t.adminMemberPhone],
+                      ['email', t.adminMemberEmail],
                     ] as const
                   ).map(([key, label]) => (
                     <label key={key} className="field">
@@ -833,26 +830,26 @@ export function AdminDashboard() {
                       }))
                     }
                   >
-                    حذف الموظف
+                    {t.adminDeleteMember}
                   </button>
                 </div>
               ))}
             </div>
-            <SaveBar section="team" label="حفظ الموظفين" onSave={saveTeam} />
+            <SaveBar section="team" label={t.adminSaveTeam} onSave={saveTeam} />
           </section>
         ) : null}
 
         {tab === 'partners' ? (
           <section className="admin-section">
             <div className="admin-section-head">
-              <h2>الشركاء</h2>
+              <h2>{t.adminPartnersTitle}</h2>
               <button
                 type="button"
                 className="btn btn-outline-dark"
                 onClick={() => {
                   const next: Partner = {
                     id: createId('partner'),
-                    name: 'شريك جديد',
+                    name: ar.adminNewPartner,
                     logo: '/images/partners/tasannam.png?v=3',
                   }
                   setDraft((current) => ({
@@ -861,7 +858,7 @@ export function AdminDashboard() {
                   }))
                 }}
               >
-                إضافة شريك
+                {t.adminAddPartner}
               </button>
             </div>
             <div className="admin-list">
@@ -870,7 +867,7 @@ export function AdminDashboard() {
                   <div className="admin-thumb">
                     <img src={partner.logo} alt="" />
                     <label className="btn btn-outline-dark admin-upload">
-                      تغيير الشعار
+                      {t.adminChangeLogo}
                       <input
                         type="file"
                         accept="image/*"
@@ -889,7 +886,7 @@ export function AdminDashboard() {
                     </label>
                   </div>
                   <label className="field">
-                    <span>اسم الشركة</span>
+                    <span>{t.adminPartnerName}</span>
                     <input
                       value={partner.name}
                       onChange={(event) =>
@@ -914,14 +911,14 @@ export function AdminDashboard() {
                       }))
                     }
                   >
-                    حذف الشريك
+                    {t.adminDeletePartner}
                   </button>
                 </div>
               ))}
             </div>
             <SaveBar
               section="partners"
-              label="حفظ الشركاء"
+              label={t.adminSavePartners}
               onSave={savePartners}
             />
           </section>
@@ -929,12 +926,12 @@ export function AdminDashboard() {
 
         {tab === 'values' ? (
           <section className="admin-section">
-            <h2>منهج العمل</h2>
+            <h2>{t.adminValuesTitle}</h2>
             <div className="admin-list">
               {draft.values.map((value, index) => (
                 <div key={`${value.title}-${index}`} className="admin-card">
                   <label className="field">
-                    <span>العنوان</span>
+                    <span>{t.adminValueTitle}</span>
                     <input
                       value={value.title}
                       onChange={(event) =>
@@ -950,7 +947,7 @@ export function AdminDashboard() {
                     />
                   </label>
                   <label className="field">
-                    <span>النص</span>
+                    <span>{t.adminValueText}</span>
                     <textarea
                       rows={3}
                       value={value.text}
@@ -971,7 +968,7 @@ export function AdminDashboard() {
             </div>
             <SaveBar
               section="values"
-              label="حفظ منهج العمل"
+              label={t.adminSaveValues}
               onSave={saveValues}
             />
           </section>
@@ -984,7 +981,7 @@ export function AdminDashboard() {
             onClick={() => void confirmReset()}
             disabled={publishing}
           >
-            استعادة البيانات الافتراضية
+            {t.adminResetDefaults}
           </button>
         </div>
       </div>

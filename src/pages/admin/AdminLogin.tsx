@@ -18,11 +18,7 @@ export function AdminLogin() {
     event.preventDefault()
     const ok = login(identifier)
     if (!ok) {
-      setError(
-        t.adminIdentifier.includes('Email')
-          ? 'Enter an email or phone to continue.'
-          : 'أدخل بريدًا أو رقمًا للمتابعة.',
-      )
+      setError(t.adminLoginError)
       return
     }
     ensureGithubTokenFromEnv()
@@ -45,11 +41,7 @@ export function AdminLogin() {
               setIdentifier(event.target.value)
               setError('')
             }}
-            placeholder={
-              t.adminIdentifier.includes('Email')
-                ? 'e.g. admin@broa.sa'
-                : 'مثال: admin@broa.sa أو 05xxxxxxxx'
-            }
+            placeholder={t.adminLoginPh}
             autoFocus
           />
         </label>

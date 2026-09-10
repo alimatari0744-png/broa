@@ -1,17 +1,15 @@
 import { PageHero } from '../components/PageHero'
 import { Reveal } from '../components/Reveal'
-import { useSite } from '../context/SiteContext'
+import { useLanguage, useLocalizedSite } from '../context/LanguageContext'
 
 export function Partners() {
-  const { data } = useSite()
+  const { t } = useLanguage()
+  const data = useLocalizedSite()
   const { partners } = data
 
   return (
     <>
-      <PageHero
-        title="شركاء النجاح"
-        text="شركاء النجاح المعتمدون لدى المؤسسة."
-      />
+      <PageHero title={t.navPartners} text={t.partnersPageLead} />
       <section className="section">
         <div className="container">
           <div className="partners-grid">

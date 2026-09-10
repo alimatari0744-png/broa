@@ -7,10 +7,11 @@ import { SectionTitle } from '../components/SectionTitle'
 import { ServiceCard } from '../components/ServiceCard'
 import { TeamCard } from '../components/TeamCard'
 import { WindowMotif } from '../components/WindowMotif'
-import { useSite } from '../context/SiteContext'
+import { useLanguage, useLocalizedSite } from '../context/LanguageContext'
 
 export function Home() {
-  const { data } = useSite()
+  const { t } = useLanguage()
+  const data = useLocalizedSite()
   const { company, partners, services, team, values } = data
 
   return (
@@ -23,25 +24,25 @@ export function Home() {
             </div>
             <h1 className="hero-slogan">
               <span className="hero-slogan-main">
-                <span>للمقاولات العامة</span>
-                <em>وتأجير المعدات</em>
+                <span>{t.heroLine1}</span>
+                <em>{t.heroLine2}</em>
               </span>
               <span className="hero-slogan-rule" aria-hidden="true" />
-              <span className="hero-slogan-sub">بمعايير الجودة والاحتراف</span>
+              <span className="hero-slogan-sub">{t.heroLine3}</span>
             </h1>
             <p className="hero-lead">{company.description}</p>
             <div className="hero-actions">
               <Link to="/services" className="btn btn-gold">
-                خدماتنا
+                {t.navServices}
               </Link>
               <Link to="/contact" className="btn btn-outline-dark">
-                تواصل معنا
+                {t.contactCta}
               </Link>
             </div>
           </Reveal>
           <Reveal>
             <div className="hero-visual">
-              <img src="/images/hero.jpg" alt="أعمال مؤسسة بروع التجارية" />
+              <img src="/images/hero.jpg" alt={t.heroImageAlt} />
             </div>
           </Reveal>
         </div>
@@ -52,23 +53,19 @@ export function Home() {
           <Reveal>
             <div className="about-copy">
               <SectionTitle
-                eyebrow="نبذة عن المؤسسة"
+                eyebrow={t.aboutEyebrow}
                 title={company.name}
                 text={company.description}
               />
-              <p>
-                نعمل في قطاع المقاولات والبناء بروح احترافية واضحة، ونقدم خدمات
-                متكاملة تغطي السكن، محطات البترول، أعمال العظم والتشطيب، إلى جانب
-                تأجير المعدات وتوريد مواد البناء.
-              </p>
+              <p>{t.aboutExtra}</p>
               <Link to="/about" className="btn btn-gold">
-                المزيد عن المؤسسة
+                {t.aboutMore}
               </Link>
             </div>
           </Reveal>
           <Reveal>
             <div className="about-media">
-              <img src="/images/about.jpg" alt="فريق العمل في أحد مواقع المشاريع" />
+              <img src="/images/about.jpg" alt={t.aboutMediaAlt} />
             </div>
           </Reveal>
         </div>
@@ -77,9 +74,9 @@ export function Home() {
       <section className="section section-alt">
         <div className="container">
           <SectionTitle
-            eyebrow="خدماتنا"
-            title="حلول متكاملة في المقاولات والبناء"
-            text="نقدم خدماتنا من خلال بطاقات مستقلة تسهّل التعرف على نشاط المؤسسة واختيار ما يناسب مشروعك."
+            eyebrow={t.servicesEyebrow}
+            title={t.servicesTitle}
+            text={t.servicesText}
           />
           <div className="cards-grid">
             {services.map((service) => (
@@ -93,7 +90,7 @@ export function Home() {
 
       <section className="section">
         <div className="container">
-          <SectionTitle eyebrow="منهج العمل" title="معايير واضحة في كل مشروع" />
+          <SectionTitle eyebrow={t.valuesEyebrow} title={t.valuesTitle} />
           <div className="values-grid">
             {values.map((value) => (
               <Reveal key={value.title}>
@@ -111,9 +108,9 @@ export function Home() {
       <section className="section section-alt">
         <div className="container">
           <SectionTitle
-            eyebrow="فريق العمل"
-            title="خبرات تشرف على التنفيذ"
-            text="بيانات فريق العمل الرسمية، والصور تجريبية لحين اعتماد الصور الحقيقية."
+            eyebrow={t.teamEyebrow}
+            title={t.teamTitle}
+            text={t.teamText}
           />
           <div className="team-grid">
             {team.map((member) => (
@@ -124,7 +121,7 @@ export function Home() {
           </div>
           <div className="section-cta">
             <Link to="/team" className="btn btn-outline-dark">
-              عرض فريق العمل
+              {t.teamCta}
             </Link>
           </div>
         </div>
@@ -133,9 +130,9 @@ export function Home() {
       <section className="section">
         <div className="container">
           <SectionTitle
-            eyebrow="شركاء النجاح"
-            title="ثقة تُبنى بالإنجاز"
-            text="شركاء نجاح نعتمد عليهم في تنفيذ المشاريع."
+            eyebrow={t.partnersEyebrow}
+            title={t.partnersTitle}
+            text={t.partnersText}
           />
           <div className="partners-grid">
             {partners.map((partner) => (
@@ -155,9 +152,9 @@ export function Home() {
       <section className="section section-alt">
         <div className="container">
           <SectionTitle
-            eyebrow="تواصل معنا"
-            title="الأرقام الرسمية المعتمدة"
-            text="للاستفسار والدعم يمكنكم التواصل مباشرة عبر واتساب، مع عرض الموقع على الخريطة بجانب بيانات التواصل."
+            eyebrow={t.contactEyebrow}
+            title={t.contactTitle}
+            text={t.contactText}
           />
           <ContactPanel />
         </div>
@@ -166,9 +163,9 @@ export function Home() {
       <section className="section">
         <div className="container">
           <SectionTitle
-            eyebrow="نموذج التواصل"
-            title="أرسل بياناتك وسنعاود الاتصال"
-            text="أدخل اسمك وبريدك ورقم جوالك، واختر الخدمة المطلوبة مع كتابة نص الرسالة."
+            eyebrow={t.formSectionEyebrow}
+            title={t.formSectionTitle}
+            text={t.formSectionText}
           />
           <ContactForm />
         </div>
