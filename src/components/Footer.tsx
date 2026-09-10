@@ -26,6 +26,12 @@ export function Footer() {
           <ul>
             <li>{company.name}</li>
             <li>السجل التجاري: {company.commercialRegister}</li>
+            <li>
+              الرقم الضريبي: <span dir="ltr">{company.taxNumber}</span>
+            </li>
+            <li>
+              الآيبان: <span dir="ltr">{company.iban}</span>
+            </li>
             <li>{company.tagline}</li>
           </ul>
         </div>
@@ -47,9 +53,16 @@ export function Footer() {
         </div>
       </div>
       <div className="footer-bottom">
-        <div className="container">
+        <div className="container footer-bottom-inner">
           <p>
             © {new Date().getFullYear()} {company.name} — جميع الحقوق محفوظة
+          </p>
+          <p className="footer-meta">
+            الرقم الضريبي: <span dir="ltr">{company.taxNumber}</span>
+            <span className="footer-meta-sep" aria-hidden="true">
+              |
+            </span>
+            الآيبان: <span dir="ltr">{company.iban}</span>
           </p>
         </div>
       </div>
