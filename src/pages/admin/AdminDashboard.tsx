@@ -10,14 +10,24 @@ import {
   type TeamMember,
 } from '../../data/site'
 import { useSite } from '../../context/SiteContext'
+import { useLanguage } from '../../context/LanguageContext'
 import { ensureGithubTokenFromEnv } from '../../lib/githubStore'
+import { LanguageToggle } from '../../components/LanguageToggle'
 
 type Tab = 'company' | 'contact' | 'services' | 'team' | 'partners' | 'values'
 
-const tabs: { id: Tab; label: string; icon: ReactNode }[] = [
+type TabLabelKey =
+  | 'tabCompany'
+  | 'tabContact'
+  | 'tabServices'
+  | 'tabTeam'
+  | 'tabPartners'
+  | 'tabValues'
+
+const tabs: { id: Tab; labelKey: TabLabelKey; icon: ReactNode }[] = [
   {
     id: 'company',
-    label: 'بيانات المنشأة',
+    labelKey: 'tabCompany',
     icon: (
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <path d="M4 20V9l8-5 8 5v11h-6v-6H10v6z" />
@@ -26,7 +36,7 @@ const tabs: { id: Tab; label: string; icon: ReactNode }[] = [
   },
   {
     id: 'contact',
-    label: 'التواصل والخريطة',
+    labelKey: 'tabContact',
     icon: (
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 7a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11.4 11.4 0 0 0 .57 3.6 1 1 0 0 1-.25 1z" />
@@ -35,7 +45,7 @@ const tabs: { id: Tab; label: string; icon: ReactNode }[] = [
   },
   {
     id: 'services',
-    label: 'الخدمات',
+    labelKey: 'tabServices',
     icon: (
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <path d="M4 5h7v7H4zm9 0h7v4h-7zM4 14h7v5H4zm9-3h7v8h-7z" />
@@ -44,7 +54,7 @@ const tabs: { id: Tab; label: string; icon: ReactNode }[] = [
   },
   {
     id: 'team',
-    label: 'الموظفون',
+    labelKey: 'tabTeam',
     icon: (
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <path d="M9 11a3.5 3.5 0 1 0-3.5-3.5A3.5 3.5 0 0 0 9 11zm9.5-1a3 3 0 1 0-3-3 3 3 0 0 0 3 3zM9 13c-3.4 0-6 1.7-6 4v2h12v-2c0-2.3-2.6-4-6-4zm8.5 0c-.5 0-1 .05-1.5.14 1.6.9 2.5 2.2 2.5 3.86V19h4v-2c0-2-2-3.7-5-3.86z" />
@@ -53,7 +63,7 @@ const tabs: { id: Tab; label: string; icon: ReactNode }[] = [
   },
   {
     id: 'partners',
-    label: 'الشركاء',
+    labelKey: 'tabPartners',
     icon: (
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <path d="M8 8a3 3 0 1 0-3-3 3 3 0 0 0 3 3zm11 0a3 3 0 1 0-3-3 3 3 0 0 0 3 3zM8 10c-2.8 0-5 1.6-5 3.5V16h6.2A6.5 6.5 0 0 1 16 10.1 5.2 5.2 0 0 0 8 10zm8 1a4.5 4.5 0 0 0-4.5 4.5V20h9v-4.5A4.5 4.5 0 0 0 16 11z" />
@@ -62,7 +72,7 @@ const tabs: { id: Tab; label: string; icon: ReactNode }[] = [
   },
   {
     id: 'values',
-    label: 'منهج العمل',
+    labelKey: 'tabValues',
     icon: (
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <path d="M7 3h10a2 2 0 0 1 2 2v14l-7-3-7 3V5a2 2 0 0 1 2-2zm2 4v2h6V7zm0 4v2h6v-2z" />
@@ -86,6 +96,7 @@ function cloneData(value: SiteData): SiteData {
 
 export function AdminDashboard() {
   const { isAdmin, logout, data, publishData, resetData } = useSite()
+  const { t } = useLanguage()
   const [tab, setTab] = useState<Tab>('company')
   const [draft, setDraft] = useState<SiteData>(() => cloneData(data))
   const [savedSection, setSavedSection] = useState<Tab | 'reset' | null>(null)
@@ -290,10 +301,11 @@ export function AdminDashboard() {
           <img src="/logo-mark.png?v=1" alt="" className="admin-top-mark" />
         </div>
         <div className="admin-top-actions">
+          <LanguageToggle />
           <button
             className={`menu-toggle admin-menu-toggle ${menuOpen ? 'is-open' : ''}`}
             type="button"
-            aria-label={menuOpen ? 'إغلاق القائمة' : 'فتح القائمة'}
+            aria-label={menuOpen ? t.closeMenu : t.openMenu}
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen((value) => !value)}
           >
@@ -306,14 +318,14 @@ export function AdminDashboard() {
             className="btn btn-outline-dark admin-desktop-action"
             target="_blank"
           >
-            عرض الموقع
+            {t.adminViewSite}
           </Link>
           <button
             type="button"
             className="btn btn-gold admin-desktop-action"
             onClick={logout}
           >
-            خروج
+            {t.adminLogout}
           </button>
         </div>
       </header>
@@ -332,7 +344,7 @@ export function AdminDashboard() {
             className={tab === item.id ? 'is-active' : ''}
             onClick={() => selectTab(item.id)}
           >
-            {item.label}
+            {t[item.labelKey]}
           </button>
         ))}
       </div>
@@ -371,7 +383,7 @@ export function AdminDashboard() {
                 onClick={() => selectTab(item.id)}
               >
                 {item.icon}
-                <span>{item.label}</span>
+                <span>{t[item.labelKey]}</span>
               </button>
             ))}
           </nav>
@@ -382,10 +394,10 @@ export function AdminDashboard() {
               target="_blank"
               onClick={() => setMenuOpen(false)}
             >
-              عرض الموقع
+              {t.adminViewSite}
             </Link>
             <button type="button" className="btn btn-gold" onClick={logout}>
-              خروج
+              {t.adminLogout}
             </button>
           </div>
         </aside>

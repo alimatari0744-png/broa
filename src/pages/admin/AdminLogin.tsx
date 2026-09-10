@@ -1,10 +1,13 @@
 import { useState, type FormEvent } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
+import { useLanguage } from '../../context/LanguageContext'
 import { useSite } from '../../context/SiteContext'
 import { ensureGithubTokenFromEnv } from '../../lib/githubStore'
+import { LanguageToggle } from '../../components/LanguageToggle'
 
 export function AdminLogin() {
   const { isAdmin, login } = useSite()
+  const { t } = useLanguage()
   const navigate = useNavigate()
   const [identifier, setIdentifier] = useState('')
   const [error, setError] = useState('')
@@ -15,7 +18,11 @@ export function AdminLogin() {
     event.preventDefault()
     const ok = login(identifier)
     if (!ok) {
-      setError('أدخل بريدًا أو رقمًا للمتابعة.')
+      setError(
+        t.adminIdentifier.includes('Email')
+          ? 'Enter an email or phone to continue.'
+          : 'أدخل بريدًا أو رقمًا للمتابعة.',
+      )
       return
     }
     ensureGithubTokenFromEnv()
@@ -25,9 +32,12 @@ export function AdminLogin() {
   return (
     <div className="admin-shell admin-login-shell">
       <form className="admin-login-card" onSubmit={handleSubmit}>
-        <img src="/logo-mark.png?v=1" alt="" className="admin-login-logo" />
+        <div className="admin-login-top">
+          <img src="/logo-mark.png?v=1" alt="" className="admin-login-logo" />
+          <LanguageToggle />
+        </div>
         <label className="field">
-          <span>البريد أو الرقم</span>
+          <span>{t.adminIdentifier}</span>
           <input
             type="text"
             value={identifier}
@@ -35,16 +45,20 @@ export function AdminLogin() {
               setIdentifier(event.target.value)
               setError('')
             }}
-            placeholder="مثال: admin@broa.sa أو 05xxxxxxxx"
+            placeholder={
+              t.adminIdentifier.includes('Email')
+                ? 'e.g. admin@broa.sa'
+                : 'مثال: admin@broa.sa أو 05xxxxxxxx'
+            }
             autoFocus
           />
         </label>
         {error ? <p className="admin-error">{error}</p> : null}
         <button type="submit" className="btn btn-gold">
-          دخول
+          {t.adminEnter}
         </button>
         <a href="/" className="admin-back-link">
-          العودة للموقع
+          {t.adminBack}
         </a>
       </form>
     </div>

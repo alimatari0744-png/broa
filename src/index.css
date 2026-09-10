@@ -267,10 +267,49 @@ p {
 }
 
 .header-cta {
+  /* kept for compatibility; layout handled by .header-end */
+}
+
+.header-end {
   grid-column: 3;
   grid-row: 1;
   z-index: 1;
   justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.lang-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--ivory);
+}
+
+.lang-switch button {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 800;
+  padding: 7px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.lang-switch button.is-active {
+  background: var(--brown);
+  color: #fff;
+}
+
+.lang-switch-mobile {
+  display: none;
 }
 
 .menu-toggle {
@@ -978,7 +1017,8 @@ p {
   }
 
   .desktop-nav,
-  .header-cta {
+  .header-cta,
+  .lang-switch-desktop {
     display: none;
   }
 
@@ -986,11 +1026,19 @@ p {
     display: flex;
   }
 
+  .header-end {
+    margin-inline-start: auto;
+  }
+
+  .lang-switch-mobile {
+    display: inline-flex;
+  }
+
   .menu-toggle {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin-inline-start: auto;
+    margin-inline-start: 0;
     z-index: 3;
   }
 
@@ -1236,6 +1284,13 @@ p {
   border: 1px solid var(--line);
   box-shadow: var(--shadow);
   text-align: center;
+}
+
+.admin-login-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
 }
 
 .admin-login-logo {

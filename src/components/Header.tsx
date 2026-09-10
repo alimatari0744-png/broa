@@ -2,7 +2,9 @@ import type { ReactNode } from 'react'
 import { useEffect, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { navLinks } from '../data/site'
+import { navLabel, useLanguage } from '../context/LanguageContext'
 import { useSite } from '../context/SiteContext'
+import { LanguageToggle } from './LanguageToggle'
 
 const icons: Record<string, ReactNode> = {
   '/': (
@@ -39,6 +41,7 @@ const icons: Record<string, ReactNode> = {
 
 export function Header() {
   const { data } = useSite()
+  const { t } = useLanguage()
   const { company } = data
   const { pathname } = useLocation()
   const [open, setOpen] = useState(false)
@@ -64,7 +67,7 @@ export function Header() {
             <img className="brand-mark" src="/logo-mark.png?v=1" alt="" />
           </Link>
 
-          <nav className="desktop-nav" aria-label="التنقل الرئيسي">
+          <nav className="desktop-nav" aria-label={t.navHome}>
             {navLinks
               .filter((link) => link.to !== '/contact')
               .map((link) => (
@@ -74,26 +77,29 @@ export function Header() {
                   end={link.to === '/'}
                   className={({ isActive }) => (isActive ? 'is-active' : '')}
                 >
-                  {link.label}
+                  {navLabel(link.to, t)}
                 </NavLink>
               ))}
           </nav>
 
-          <Link to="/contact" className="btn btn-gold header-cta">
-            تواصل معنا
-          </Link>
-
-          <button
-            className={`menu-toggle ${open ? 'is-open' : ''}`}
-            type="button"
-            aria-label={open ? 'إغلاق القائمة' : 'فتح القائمة'}
-            aria-expanded={open}
-            onClick={() => setOpen((value) => !value)}
-          >
-            <span />
-            <span />
-            <span />
-          </button>
+          <div className="header-end">
+            <LanguageToggle className="lang-switch-desktop" />
+            <Link to="/contact" className="btn btn-gold header-cta">
+              {t.contactCta}
+            </Link>
+            <LanguageToggle className="lang-switch-mobile" />
+            <button
+              className={`menu-toggle ${open ? 'is-open' : ''}`}
+              type="button"
+              aria-label={open ? t.closeMenu : t.openMenu}
+              aria-expanded={open}
+              onClick={() => setOpen((value) => !value)}
+            >
+              <span />
+              <span />
+              <span />
+            </button>
+          </div>
         </div>
       </header>
 
@@ -101,7 +107,7 @@ export function Header() {
         <button
           className="nav-backdrop"
           type="button"
-          aria-label="إغلاق القائمة"
+          aria-label={t.closeMenu}
           onClick={() => setOpen(false)}
         />
         <aside className="mobile-drawer" aria-hidden={!open}>
@@ -116,13 +122,13 @@ export function Header() {
             </div>
             <button
               type="button"
-              aria-label="إغلاق القائمة"
+              aria-label={t.closeMenu}
               onClick={() => setOpen(false)}
             >
               ✕
             </button>
           </div>
-          <nav aria-label="تنقل الجوال">
+          <nav aria-label={t.navHome}>
             {navLinks.map((link) => (
               <NavLink
                 key={link.to}
@@ -131,7 +137,7 @@ export function Header() {
                 className={({ isActive }) => (isActive ? 'is-active' : '')}
               >
                 {icons[link.to]}
-                <span>{link.label}</span>
+                <span>{navLabel(link.to, t)}</span>
               </NavLink>
             ))}
           </nav>
