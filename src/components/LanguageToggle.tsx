@@ -12,8 +12,8 @@ export function LanguageToggle({ className = '' }: { className?: string }) {
       aria-label={nextIsEnglish ? t.switchToEnglish : t.switchToArabic}
       title={nextIsEnglish ? t.switchToEnglish : t.switchToArabic}
     >
-      <span className="lang-toggle-letter" lang={nextIsEnglish ? 'en' : 'ar'}>
-        {nextIsEnglish ? 'A' : 'ع'}
+      <span lang={nextIsEnglish ? 'en' : 'ar'}>
+        {nextIsEnglish ? 'EN' : 'ع'}
       </span>
     </button>
   )
