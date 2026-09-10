@@ -1,4 +1,3 @@
-import { CompanyInfo } from '../components/CompanyInfo'
 import { ContactForm } from '../components/ContactForm'
 import { ContactPanel } from '../components/ContactPanel'
 import { PageHero } from '../components/PageHero'
@@ -14,16 +13,6 @@ export function Contact() {
       <section className="section">
         <div className="container">
           <SectionTitle
-            eyebrow="نموذج التواصل"
-            title="أرسل بياناتك وسنعاود الاتصال"
-            text="أدخل اسمك وبريدك ورقم جوالك، واختر الخدمة المطلوبة مع كتابة نص الرسالة."
-          />
-          <ContactForm />
-        </div>
-      </section>
-      <section className="section section-alt">
-        <div className="container">
-          <SectionTitle
             eyebrow="بيانات التواصل"
             title="الأرقام الرسمية والخريطة"
             text="الأرقام الرسمية المعتمدة للاستفسارات والدعم، مع عرض الموقع على الخريطة."
@@ -31,7 +20,16 @@ export function Contact() {
           <ContactPanel />
         </div>
       </section>
-      <CompanyInfo />
+      <section className="section section-alt">
+        <div className="container">
+          <SectionTitle
+            eyebrow="نموذج التواصل"
+            title="أرسل بياناتك وسنعاود الاتصال"
+            text="أدخل اسمك وبريدك ورقم جوالك، واختر الخدمة المطلوبة مع كتابة نص الرسالة."
+          />
+          <ContactForm />
+        </div>
+      </section>
     </>
   )
 }

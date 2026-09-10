@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { CompanyInfo } from '../components/CompanyInfo'
+import { ContactForm } from '../components/ContactForm'
 import { ContactPanel } from '../components/ContactPanel'
 import { Reveal } from '../components/Reveal'
 import { SectionTitle } from '../components/SectionTitle'
@@ -156,6 +157,17 @@ export function Home() {
             text="للاستفسار والدعم يمكنكم التواصل مباشرة عبر واتساب، مع عرض الموقع على الخريطة بجانب بيانات التواصل."
           />
           <ContactPanel />
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="container">
+          <SectionTitle
+            eyebrow="نموذج التواصل"
+            title="أرسل بياناتك وسنعاود الاتصال"
+            text="أدخل اسمك وبريدك ورقم جوالك، واختر الخدمة المطلوبة مع كتابة نص الرسالة."
+          />
+          <ContactForm />
         </div>
       </section>
     </>
