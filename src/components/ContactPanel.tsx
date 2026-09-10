@@ -25,10 +25,6 @@ export function ContactPanel() {
             <strong>{company.email}</strong>
           </a>
         </div>
-        <div className="contact-item is-static">
-          <span>السجل التجاري</span>
-          <strong>{company.commercialRegister}</strong>
-        </div>
       </div>
       <div className="contact-map">
         <iframe
