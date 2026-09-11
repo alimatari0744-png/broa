@@ -175,7 +175,7 @@ export const defaultSiteData: SiteData = {
       phone: '0592589204',
       whatsapp: '966592589204',
       email: 'nasser_s059@hotmail.com',
-      image: '/images/team/abdullah.jpg',
+      image: '/images/team/nasser.png',
     },
     {
       id: 'mohammed',
@@ -185,7 +185,7 @@ export const defaultSiteData: SiteData = {
       phone: '0502622476',
       whatsapp: '966502622476',
       email: 'Troytotroy86@gmail.com',
-      image: '/images/team/khaled.jpg',
+      image: '/images/team/mohammed.png',
     },
   ],
   partners: [

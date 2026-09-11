@@ -751,7 +751,7 @@ export function AdminDashboard() {
                     phone: '',
                     whatsapp: '',
                     email: '',
-                    image: '/images/team/abdullah.jpg',
+                    image: '/images/team/nasser.png',
                   }
                   setDraft((current) => ({
                     ...current,

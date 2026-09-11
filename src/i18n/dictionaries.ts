@@ -224,8 +224,7 @@ export const dictionaries: Record<Lang, Dictionary> = {
     valuesTitle: 'معايير واضحة في كل مشروع',
     teamEyebrow: 'فريق العمل',
     teamTitle: 'خبرات تشرف على التنفيذ',
-    teamText:
-      'بيانات فريق العمل الرسمية، والصور تجريبية لحين اعتماد الصور الحقيقية.',
+    teamText: 'بيانات فريق العمل الرسمية المعتمدة.',
     teamCta: 'عرض فريق العمل',
     partnersEyebrow: 'شركاء النجاح',
     partnersTitle: 'ثقة تُبنى بالإنجاز',
@@ -398,8 +397,7 @@ export const dictionaries: Record<Lang, Dictionary> = {
     valuesTitle: 'Clear standards on every project',
     teamEyebrow: 'Our team',
     teamTitle: 'Expertise that leads execution',
-    teamText:
-      'Official team contact details. Photos are placeholders until final portraits are approved.',
+    teamText: 'Official team contact details.',
     teamCta: 'View the team',
     partnersEyebrow: 'Success partners',
     partnersTitle: 'Trust built by delivery',
